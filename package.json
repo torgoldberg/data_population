@@ -1,0 +1,38 @@
+{
+  "name": "data_population",
+  "version": "1.0.0",
+  "description": "create data on env before testing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "tor goldberg",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/preset-env": "^7.20.2",
+    "axios": "^1.2.1",
+    "babel-plugin-proto-to-assign": "^1.0.4",
+    "dotenv": "^16.0.3",
+    "fs": "^0.0.1-security",
+    "inversify": "^6.0.1",
+    "jest": "^29.4.2",
+    "jest-babel": "^1.0.1",
+    "json5": "^2.2.3",
+    "jsonschema": "^1.4.1",
+    "lodash": "^4.17.21",
+    "minimatch": "^9.0.3",
+    "path": "^0.12.7",
+    "reflect-metadata": "^0.1.13"
+  },
+  "type": "module",
+  "jest": {
+    "setupFiles": [
+      "./setup-jest.js"
+    ],
+    "testMatch": [
+      "**/scripts/**"
+    ],
+    "maxConcurrency": 50
+  }
+}

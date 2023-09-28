@@ -1,0 +1,22 @@
+[
+    {
+        "id": 111,
+        "username": "user111",
+        "firstName": "user111",
+        "lastName": "user111",
+        "email": "user111@test.com",
+        "password": "111",
+        "phone": "111",
+        "userStatus": 0
+    },
+    {
+        "id": 222,
+        "username": "user222",
+        "firstName": "user222",
+        "lastName": "user222",
+        "email": "user222@test.com",
+        "password": "222",
+        "phone": "222",
+        "userStatus": 0
+    }
+]
