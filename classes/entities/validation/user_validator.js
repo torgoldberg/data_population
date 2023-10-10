@@ -1,19 +1,15 @@
 import {
-    ValidatorBase,
-    validateSchemaUsers
+    BaseValidator,
 } from '../../../index.js';
 
-export class UserValidator extends ValidatorBase {
+//Validating user related data or entities based on a schema
+export class UserValidator extends BaseValidator {
 
     paramsHandler;
-    schemaValidationData = './config/schema-validation/validation-data/User.json';
+    schemaValidationData = './json_data/user_schema.json';
 
     constructor(paramsHandler) {
         super('users');
         this.paramsHandler = paramsHandler;
     }
-
-    process = (async() => {
-        this.schemaValidationErrors = await validateSchemaUsers(this.paramsHandler.getApiInfo(), this.schemaValidationEntity);
-    })
 }

@@ -1,6 +1,6 @@
-import { ParamsHendler } from '../../index.js';
+import { ParamsHandler } from '../../index.js';
 
-export class LatencyReportHandler extends ParamsHendler {
+export class LatencyReportHandler extends ParamsHandler {
 
     constructor() {
         

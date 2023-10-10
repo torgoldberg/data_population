@@ -20,10 +20,6 @@ export class BaseCreator {
         throw new Error("Method 'createEntitiesFromTestData' must be implemented.");
     }
 
-    createDuplicateEntities() {
-        throw new Error("Method 'createDuplicateEntities' must be implemented.");
-    }
-
     pre() {
         this.entities = JSON.parse(fs.readFileSync(this.testData));
     }

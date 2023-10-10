@@ -1,18 +1,22 @@
 import {
-    sendAPIRequest, fetchData, getValuesByKeys,
+    sendAPIRequest, fetchData, getValuesByKeys, 
     printSummaryLine,
-    userSchema, validateSchema
+    userSchema, validateSchema, handleMissingEntityProperty,
 } from '../../index.js'
 
-
+//Full proccess to varify shcema before using
 export const validateSchemaUsers = (async (apiInfo, user) => {
 
+    //Delete the specific user from user_schema to verify he doens't exist
     await deleteUser(apiInfo, user.username);
 
+    //Create the specific user from user_schema to make sure you can create user
     await createUser(apiInfo, user);
 
+    //Get the specific user from user_schema to make sure he exist
     const createdUser = await verifyUserExists(apiInfo, user.username, true);
 
+    //
     const schemaValidationPassed = validateSchema(createdUser, userSchema);
 
     await deleteUser(apiInfo, user.username);
@@ -37,19 +41,14 @@ export const createUserIteration = (async ({apiInfo, user, shouldVerify, deleteO
 
     await verifyUserExists(apiInfo, user.username, shouldVerify);
 
-    if (user.admin) {
-        const currentAdminsIds = await getCurrentAdminsIds(apiInfo);
-        const updatedAdminsIds = currentAdminsIds.concat(createdUser.id);
-        await updateAdminsIds(apiInfo, updatedAdminsIds);
-    }
-
     printSummaryLine(`User ${user.username} was re-created`, startRunTime);
 })
 
+//Send delete to a specific entity
 export const deleteUser = (async (apiInfo, username) => {
 
     const method = 'DELETE';
-    const url = `/users/${username}`;
+    const url = `/user/${username}`;
     // no status verification here because we don't really care if the user existed or not, we want to ensure he doesn't exist
     const expectedStatus = null;
 
@@ -77,31 +76,27 @@ const verifyUserDoesNotExist = (async (apiInfo, username, shouldVerify) => {
     }
 })
 
-const getCreateUserData = (async (apiInfo, user) => {
-
+const getCreateUserData = (async (user) => {
     // automation defaults
     let data = {
-        name: user.username,
-        password: user.password,
-        send_email: (typeof user.sendEmail !== 'undefined') ? user.sendEmail : false
+        "id": user.id,
+        "username": user.username,
+        "firstName": user.firstName,
+        "lastName": user.lastName,
+        "email": user.email,
+        "password": user.password,
+        "phone": user.phone,
+        "userStatus": (typeof user.userStatus !== 'undefined') ? user.userStatus : 0
     };
-
-    // application defaults
-    if (user.email) {
-        data.email = user.email;
-    }
-    if (user.phoneNumber) {
-        data.phone_number = user.phoneNumber;
-    }
     return data;
 })
 
 export const createUser = (async (apiInfo, user) => {
 
-    const method = 'PUT';
-    const url = `/users`;
-    const data = await getCreateUserData(apiInfo, user);
-    const expectedStatus = 201;
+    const method = 'POST';
+    const url = `/user`;
+    const data = await getCreateUserData(user);
+    const expectedStatus = 200;
 
     try {
         const response = await sendAPIRequest({ apiInfo, method, url, data, expectedStatus });
@@ -118,7 +113,7 @@ const verifyUserExists = (async (apiInfo, username, shouldVerify) => {
     }
 
     const method = 'GET';
-    const url = `/users/${username}`;
+    const url = `/user/${username}`;
 
     try {
         const response = await sendAPIRequest({ apiInfo, method, url });
@@ -144,3 +139,31 @@ export const getUsersIdsByNames = (async (apiInfo, usersNames) => {
         throw 'getUsersIdsByNames failed:', err;
     }
 })
+export const verifyMandatoryUserId = (user => {
+    const propertyName = 'password';
+    if (!user[propertyName]) {
+        handleMissingEntityProperty(propertyName);
+    }
+    return user.id;
+})
+
+export const verifyMandatoryUserName = (user => {
+    const propertyName = 'username';
+    if (!user[propertyName]) {
+        handleMissingEntityProperty(propertyName);
+    }
+    return user.username;
+})
+
+export const verifyMandatoryUserStatus = (user => {
+    const propertyName = 'userStatus';
+    if ( typeof user[propertyName] === 'undefined') {
+        handleMissingEntityProperty(propertyName);
+    }
+    return user.userStatus;
+})
+
+
+
+
+

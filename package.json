@@ -4,7 +4,12 @@
   "description": "create data on env before testing",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "users": "node classes/tests/validation/users_validation.js; node classes/tests/creation/users_creation.js",
+    "api-keys": "node classes/tests/validation/api_key_validation.js; node classes/tests/creation/api_key_creation.js",
+    "orders": "node classes/tests/validation/order_validation.js; node classes/tests/creation/order_creation.js",
+    "pets": "node classes/tests/validation/pet_validation.js; node classes/tests/creation/pet_creation.js",
+    "all": "npm run users; npm run api-keys; npm run order; npm run pets",
+    "latency": "jest LatencyReport"
   },
   "keywords": [],
   "author": "tor goldberg",

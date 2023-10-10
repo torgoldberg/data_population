@@ -11,14 +11,21 @@ function getAllJavaScriptFiles(dir, fileList = []) {
     const filePath = path.join(dir, file);
     const isDirectory = fs.statSync(filePath).isDirectory();
 
+    // Check if the file should be ignored
     if (isDirectory && file !== 'node_modules') {
       // Skip the 'node_modules' directory
       getAllJavaScriptFiles(filePath, fileList);
-    } else if (!isDirectory && file.endsWith('.js')) {
+    } else if (!isDirectory && file.endsWith('.js') && !ignoreFile(file)) {
       fileList.push(filePath);
     }
   }
   return fileList;
+}
+
+//Files that should be ignored
+function ignoreFile(filename) {
+  const ignoreList = ['dependency_injection_config.js', 'generate-index.js'];
+  return ignoreList.includes(filename);
 }
 
 const allJavaScriptFiles = getAllJavaScriptFiles(projectRoot);
@@ -32,5 +39,6 @@ const exportStatements = allJavaScriptFiles.map((filePath) => {
 //Writing the generated export statements to index.js
 const indexFilePath = path.join(projectRoot, 'index.js');
 fs.writeFileSync(indexFilePath, exportStatements.join('\n'));
+
 
 console.log(`index.js created in ${indexFilePath}`);

@@ -20,7 +20,7 @@ export const userSchema = {
             "type": "string"
         },
         "phone": {
-            "type": "integer"
+            "type": "string"
         },
         "userStatus": {
             "type": "integer"
@@ -31,10 +31,6 @@ export const userSchema = {
         "id",
         "username",
         "firstName",
-        "lastName",
-        "email",
-        "password",
-        "phone",
         "userStatus"
     ]
 }

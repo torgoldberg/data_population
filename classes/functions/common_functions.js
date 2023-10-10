@@ -3,21 +3,20 @@ import { EOL } from 'node:os';
 import { Validator } from 'jsonschema';
 
 import {
-    fetchMappingAttributes,
-    fetchSites,
-    fetchDomains,
-    fetchProtocols,
-    fetchConstraints,
-    fetchCapabilities
+    fetchDomains
 } from '../../index.js';
 
 
 const HttpClientSingleton = (() => {
     let instance;
 
+    //Sending the APi request with authorization
     const createInstance = ((apiInfo) => {
         return axios.create({
             baseURL: apiInfo.apiBaseUrl,
+            headers: {
+                'api_key': apiInfo.apiKey
+            },
             auth: {
                 username: apiInfo.apiKeyUsername,
                 password: apiInfo.apiKeyPassword
@@ -45,6 +44,16 @@ export const sendAPIRequest = (async ({ apiInfo, method, url, data, expectedStat
     };
 
     try {
+        console.log(`Sending ${method} request to: ${apiInfo.apiBaseUrl}${url}`);
+               // Log the headers being sent
+            console.log("Headers:");
+            console.log({
+                ...apiInfo.headers, // Include headers from apiInfo if any
+                "api_key": apiInfo.apiKey
+            });
+               
+            console.log("Data:");
+            console.log(data);
         return await (HttpClientSingleton.getInstance(apiInfo))({
             method,
             url,
@@ -86,41 +95,10 @@ export const fetchCoreData = (async (apiInfo) => {
     let coreData = {};
 
     try {
-        coreData.mappingAttributes = await fetchMappingAttributes(apiInfo);
-    } catch (err) {
-        throw 'fetchMappingAttributes failed:', err;
-    }
-
-    try {
-        coreData.sites = await fetchSites(apiInfo);
-    } catch (err) {
-        throw 'fetchSites failed:', err;
-    }
-
-    try {
         coreData.domains = await fetchDomains(apiInfo);
     } catch (err) {
         throw 'fetchDomains failed:', err;
     }
-
-    try {
-        coreData.protocols = await fetchProtocols(apiInfo);
-    } catch (err) {
-        throw 'fetchProtocols failed:', err;
-    }
-
-    try {
-        coreData.constraints = await fetchConstraints(apiInfo);
-    } catch (err) {
-        throw 'fetchConstraints failed:', err;
-    }
-
-    try {
-        coreData.capabilities = await fetchCapabilities(apiInfo);
-    } catch (err) {
-        throw 'fetchCapabilities failed:', err;
-    }
-
     return coreData;
 })
 

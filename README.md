@@ -26,3 +26,10 @@ The script will trigger parallel jobs based on NUM_USERS.
 Each job will run for RUN_TIME_MIN (in minutes) creating sessions (API request /auth/local/1/stage/1) for user USER_BASENAME followed by a running number starting with START_INDEX with password as specified in USER_PASSWORD.
 Each iteration will be suspended for a random number of seconds to simulate real use case. 
 In the end the process will output the results into output/LatencyReport-[region].csv where region is defined by the REGION parameter. The following information will be output: Region, User, Session, Response success, Response time in sec, Error.
+
+project data:
+* package.json file will hold all scripts, to add new sciprts use this file.
+* main file is index.js we will run the create command from its location.
+* the oreder of export in index.js is important because of dependencies.
+* validation scripts will use schema_validation folder.
+* creation scripts will use json_data folder.
